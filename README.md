@@ -198,9 +198,90 @@ Further personalization could be used to design a web app but would be too time 
   - This is where all of our python and flask code
 
 
+- Create a MySQL connection for our python code to our database
+- Create a python file named sql_connection.py
+- Python code with comments:
+
+```
+import mysql.connector
+
+__cnx = None   #if none then create
+
+
+def get_sql_connection():
+    global __cnx   #store in global variable   
+    if __cnx is None:
+        __cnx = mysql.connector.connect(user='---', password='-----',
+                                        host='127.0.0.1',
+                                        database='GroceryInventory')
+
+    return __cnx
+    
+```
+
+
 - Creating Products Page
   - Create python file called products_dao.py
   - DAO --> Data Access Object --> is a pattern that provides an abstract interface to some type of database or other persistence mechanism. By mapping application calls to the persistence layer, the DAO provides some specific data operations without exposing details of the database.
   - This will be a driver that allows a python module to connect to our MySQL database
   - Use "pip3 install mysql-connector-python" in terimal to install module
-  - 
+
+- Python File Code with Comments:
+
+``` 
+from sql_connection import get_sql_connection
+
+
+def get_all_products(connection):
+    cursor = connection.cursor()  #connection passed as variable through this function
+
+    query = ("SELECT products.product_id, products.name, products.uom_id, products.price_per_unit, uom.uom_name " 
+    "FROM products INNER JOIN uom ON products.uom_id=uom.uom_id;")
+
+    cursor.execute(query)
+
+    response = []
+
+
+    for (product_id, name, uom_id, price_per_unit, uom_name) in cursor:
+        response.append(
+            {
+                'product_id': product_id,
+                'name': name,
+                'uom_id': uom_id,
+                'price_per_unit': price_per_unit,
+                'uom_name': uom_name
+
+            }
+
+        ) 
+
+    return response
+
+
+def insert_new_product(connection, product):
+   cursor = connection.cursor()
+   query = ("INSERT INTO products "
+         "(name, uom_id, price_per_unit) "
+         "VALUES (%s, %s, %s)")
+
+   data = (product['product_name'], product['uom_id'], product['price_per_unit'])
+   cursor.execute(query, data)
+   connection.commit()
+
+   return cursor.lastrowid
+
+
+def delete_product(connection, product_id):
+   cursor = connection.cursor()
+   query = ("DELETE FROM products WHERE product_id=" + str(product_id))
+   cursor.execute(query)
+   connection.commit()
+
+
+if __name__=='__main__':
+    connection = get_sql_connection()  # mysql connection is passed through here in sepparate file
+    print(delete_product(connection, 12))
+```
+
+- Need to finish updating comments on code
