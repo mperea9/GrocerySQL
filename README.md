@@ -25,7 +25,8 @@ Further personalization could be used to design a web app but would be too time 
 
 - Create a new schema and name it "GroceryInventory"
     - Can also run a query script in MySQL command prompt to create a schema
-    - ``` CREATE SCHEMA 'GroceryInventory'; ```
+    - ``` 
+      CREATE SCHEMA 'GroceryInventory'; ```
 
 - Right click on "GroceryInventory" under Schemas and create a table
 
