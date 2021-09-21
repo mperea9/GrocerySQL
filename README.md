@@ -205,13 +205,13 @@ Further personalization could be used to design a web app but would be too time 
 ```
 import mysql.connector
 
-__cnx = None   #if none then create
+__cnx = None   
 
 
 def get_sql_connection():
-    global __cnx   #store in global variable   
-    if __cnx is None:
-        __cnx = mysql.connector.connect(user='---', password='-----',
+    global __cnx                                                            #store in global variable   
+    if __cnx is None:                                                       #if none then create
+        __cnx = mysql.connector.connect(user='---', password='-----',       #our connection credentials
                                         host='127.0.0.1',
                                         database='GroceryInventory')
 
