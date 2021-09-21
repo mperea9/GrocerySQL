@@ -8,7 +8,7 @@ Further personalization could be used to design a web app but would be too time 
 
 # Project Walk-through
 
-## Idea:
+# Idea:
 
 3 Tier Application:
 
@@ -17,7 +17,9 @@ Further personalization could be used to design a web app but would be too time 
   3. Database (mySQL Workbench) ---> Products Database Table
 
 
-## Code Walk-Through:
+# Code Walk-Through:
+
+## Database Creation:
 
 
 - Set-Up and Open Local Host Instance in MySQL Workbench
@@ -26,16 +28,16 @@ Further personalization could be used to design a web app but would be too time 
 - Create a new schema and name it "GroceryInventory"
     - Can also run a query script in MySQL command prompt to create a schema
     - ``` 
-      CREATE SCHEMA 'GroceryInventory'; ```
+      CREATE SCHEMA 'GroceryInventory';
 
 - Right click on "GroceryInventory" under Schemas and create a table
 
 - Name the table "products"
   - Add new columns and their data types
-  - "product_id" --> Datatype: INT --> marked with PK (primary key), NN (not null), AI (auto increment)
-  - "name" --> Datatype: VARCHAR(100) --> marked with NN (not null)
+  - "product_id" --> Datatype: INT --> marked with PK (primary key), NN (not null), AI (auto increment) --> product reference ID
+  - "name" --> Datatype: VARCHAR(100) --> marked with NN (not null) --> name of product
   - "uom_id" --> Datatype: INT --> marked with NN (not null) --> UOM = unit of measurement
-  - "price_per_unit" --> Datatype: DOUBLE --> marked with NN (not null) --> DOUBLE doesn't haveto be whole number ($2.5, $6.2)
+  - "price_per_unit" --> Datatype: DOUBLE --> marked with NN (not null) --> DOUBLE doesn't have to be whole number ($2.5, $6.2) --> prce per item
   - SQL Script Query:
       ``` 
         CREATE TABLE 'GroceryInventory'.'products'(
@@ -43,7 +45,7 @@ Further personalization could be used to design a web app but would be too time 
            'name' VARCHAR(100) NOT NULL,
            'uom_id' INT NOT NULL,
            'price_per_unit' DOUBLE NOT NULL,
-         PRIMARY KEY('product_id')); ```
+         PRIMARY KEY('product_id'));
          
   - Apply and finish --> new table created
 
@@ -85,4 +87,109 @@ Further personalization could be used to design a web app but would be too time 
 
 
 
-- 
+- Set up table relationships with foreign keys
+  - Foreign Key definiton: A foreign key column in a table points to a column with unique values in another table (often the primary key column) to create a way of cross-referencing the two tables. If a column is assigned a foreign key, each row of that column must contain a value that exists in the 'foreign' column it references.
+  - Simple: Links columns from different tables and runs validations
+  - Under Schemas and under GroceryInventory tables, click the gear icon when you hover over products table
+  - At the bottom, click on "Foreign Keys"
+  - We define the foreign key under "Foreign Key Name"
+  - Create a foreign key "fk_uom_id"
+  - Under "Referenced Table" drop down select 'GroceryInventory'.'uom'
+  - Next, on the right side, select "uom_id" under "Column" and "uom_id" under "Referenced Column"
+  - Again to the right under "Foreign Key Optons"
+  - Set "On Update: " to "RESTRICT"
+  - Leave "On Delete: " on NO ACTION
+  - This allows for the restrictions and prevents wrong alues being associated
+  - SQL Query Script:
+    ```
+      ALTER TABLE 'GroceryInventory'.'products'
+      ADD INDEX 'fk_uom_id_idx' ('uom_id' ASC) VISIBLE;
+      ;
+      ALTER TABLE 'GroceryInventory'.'products'
+      ADD CONSTRAINT 'fk_uom_id'
+        FOREIGN KEY('uom_id')
+        REFERENCES 'GroceryInventory'.'uom'('uom_id')
+        ON DELETE NO ACTION
+        ON UPDATE RESTRICT);
+        
+   - Apply and finish
+
+- Create another table "orders"
+  - Add new columns and their data types
+  - "order_id" --> Datatype: INT --> marked with PK (primary key), NN (not null), AI (auto increment)
+  - "customer_name" --> Datatype: VARCHAR(100) --> marked with NN (not null) --> customer's name
+  - "total" --> Datatype: DOUBLE --> marked with NN (not null) --> for the total price of order
+  - "datetime" --> Datatype: DATETIME --> marked with NN (not null) --> For day and time order was made
+  - SQL Script Query:
+      ``` 
+        CREATE TABLE 'GroceryInventory'.'orders'(
+           'order_id' INT NOT NULL AUTO_INCREMENT,
+           'customer_name' VARCHAR(100) NOT NULL,
+           'total' DOUBLE NOT NULL,
+           'datetime' DATETIME NOT NULL,
+         PRIMARY KEY('order_id'));
+         
+  - Apply and finish --> new table created
+
+- Create another table "order_details"
+  - Add new columns and their data types
+  - "order_id" --> Datatype: INT --> marked with PK (primary key), NN (not null)
+  - "product_id" --> Datatype: INT --> marked with NN (not null)
+  - "quantity" --> Datatype: DOUBLE --> marked with NN (not null) --> quantity of order
+  - "total_price" --> Datatype: DOUBLE --> marked with NN (not null) --> total price of the order
+  - SQL Script Query:
+      ``` 
+        CREATE TABLE 'GroceryInventory'.'order_details'(
+           'order_id' INT NOT NULL,
+           'product_id' INT NOT NULL,
+           'quantity' DOUBLE NOT NULL,
+           'total_price' DOUBLE NOT NULL,
+         PRIMARY KEY('order_id'));
+         
+  - Apply and finish --> new table created
+
+- Apply Foreign Keys to new tables
+  - Create foreign key "fk_order_id" in the order_details table
+  - Reference to 'GroceryInventory'.'orders' table
+  - Select "order_id" from column
+  - Select "order_id" from reference column
+  - Select RESTRICT for "On Update: "
+  - Create another foreign key "fk_product_id" in the order_details table
+  - Reference to 'GroceryInventory'.'products' table
+  - Select "product_id" from column
+  - Select "product_id" from reference column
+  - Select RESTRICT for "On Update: "
+  - SQL Query Script:
+    ```
+      ALTER TABLE 'GroceryInventory'.'order_details'
+      ADD INDEX 'fk_product_id_idx' ('product_id' ASC) VISIBLE;
+      CONSTRAINT 'fk_order_id'
+        FOREIGN KEY('order_id')
+        REFERENCES 'GroceryInventory'.'orders'('order_id')
+        ON DELETE NO ACTION
+        ON UPDATE RESTRICT
+      CONSTRAINT 'fk_product_id'
+        FOREIGN KEY('product_id')
+        REFERENCES 'GroceryInventory'.'products'('product_id')
+        ON DELETE NO ACTION
+        ON UPDATE RESTRICT);
+        
+  - Apply and finsh
+
+
+- Create a Diagram of the Database and all its connections
+  - In the top bar menu select "Database"
+  - Select "Reverse Engineer"
+  - Press Next
+  - Press Next
+  - Check "GroceryInventory"
+  - Press Next
+  - Press Next
+  - Press Execute
+  - Press Next
+  - Press Finish
+  - You should be able to see the diagram of the database model and relationships
+
+
+## Python Code and Flask Setup:
+
