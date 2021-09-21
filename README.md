@@ -36,7 +36,8 @@ Further personalization could be used to design a web app but would be too time 
   - "uom_id" --> Datatype: INT --> marked with NN (not null) --> UOM = unit of measurement
   - "price_per_unit" --> Datatype: DOUBLE --> marked with NN (not null) --> DOUBLE doesn't haveto be whole number ($2.5, $6.2)
   - SQL Script Query:
-      ```CREATE TABLE 'GroceryInventory'.'products'(
+      ``` 
+        CREATE TABLE 'GroceryInventory'.'products'(
            'product_id' INT NOT NULL AUTO_INCREMENT,
            'name' VARCHAR(100) NOT NULL,
            'uom_id' INT NOT NULL,
@@ -50,10 +51,11 @@ Further personalization could be used to design a web app but would be too time 
   - "uom_id" --> Datatype: INT --> marked with PK, NN, AI
   - "uom_name" --> Datatype: VARCHAR(45) --> marked with NN
   - SQL Query Script:
-     `CREATE TABLE 'GroceryInventory'.'uom'(
+     ``` 
+         CREATE TABLE 'GroceryInventory'.'uom'(
             'uom_id' INT NOT NULL AUTO_INCREMENT,
             'uom_name' VARCHAR(45) NOT NULL,
-      PRIMARY_KEY('uom_id'));
+         PRIMARY_KEY('uom_id'));
   
   - Apply and finish --> new table created
 
@@ -63,8 +65,9 @@ Further personalization could be used to design a web app but would be too time 
   - "uom_name" add values "each" and "kg"
   - This means "uom_id" 1 is equal to "each" and "uom_id" 2 is equal to "kg"
   - SQL Query Script:
-     `INSERT INTO 'GroceryInventory'.'uom'('uom_id', 'uom_name') VALUES ('1', 'each');
-      INSERT INTO 'GroceryInventory'.'uom'('uom_id', 'uom_name') VALUES ('2', 'kg');
+     ``` 
+         INSERT INTO 'GroceryInventory'.'uom'('uom_id', 'uom_name') VALUES ('1', 'each');
+         INSERT INTO 'GroceryInventory'.'uom'('uom_id', 'uom_name') VALUES ('2', 'kg'); 
 
   - Apply and finish
 
@@ -74,7 +77,8 @@ Further personalization could be used to design a web app but would be too time 
   - For rows "product_id", "name", "uom_id", and "price_per_unit"
   - Add these values respectively, "1", "toothpaste", "1", "30"
   - SQL Query Script:
-     `INSERT INTO 'GroceryInventory'.'products'('product_id', 'name', 'uom_id', price_per_unit) VALUES ('1', 'toothpaste', '1', '30');
+     ``` 
+         INSERT INTO 'GroceryInventory'.'products'('product_id', 'name', 'uom_id', price_per_unit) VALUES ('1', 'toothpaste', '1', '30');
 
   - Apply and finish
 
