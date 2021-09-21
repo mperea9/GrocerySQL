@@ -12,7 +12,7 @@ Further personalization could be used to design a web app but would be too time 
 
 3 Tier Application:
 
-  1. UI (HTML, CSS, Bootsrtap) ---> Products Web Page
+  1. UI (HTML, CSS, Bootstrap) ---> Products Web Page
   2. Backend (Python, Flask) ---> Products Python API
   3. Database (mySQL Workbench) ---> Products Database Table
 
@@ -193,3 +193,14 @@ Further personalization could be used to design a web app but would be too time 
 
 ## Python Code and Flask Setup:
 
+- Create an empty folder anywhere on your personal computer
+  - Create a subfolder called backend
+  - This is where all of our python and flask code
+
+
+- Creating Products Page
+  - Create python file called products_dao.py
+  - DAO --> Data Access Object --> is a pattern that provides an abstract interface to some type of database or other persistence mechanism. By mapping application calls to the persistence layer, the DAO provides some specific data operations without exposing details of the database.
+  - This will be a driver that allows a python module to connect to our MySQL database
+  - Use "pip3 install mysql-connector-python" in terimal to install module
+  - 
